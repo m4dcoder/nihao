@@ -1,2 +1,2 @@
-# nihao
-REST service template in Go
+# 你好, Metaverse!
+Sample REST service written in Go
