@@ -15,4 +15,8 @@
 # vendor/
 
 # Binaries from builds
+builds/nihao
 cmd/nihao/nihao
+
+# Docker images from builds
+builds/nihao.latest.tar.gz

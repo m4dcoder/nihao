@@ -25,7 +25,7 @@ import (
 )
 
 const (
-	port string = "5000"
+	port string = "6688"
 	tls  bool   = false
 	cert string = ""
 	key  string = ""

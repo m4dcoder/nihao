@@ -42,7 +42,10 @@ debug:
 
 clean:
 	@echo "Start cleaning..."
+	@rm -rf $(BUILDPATH)/builds/nihao
+	@rm -rf $(BUILDPATH)/builds/nihao.latest.tar.gz
 	@rm -rf $(BUILDPATH)/cmd/nihao/nihao
+	@docker image rm m4dcoder/nihao:latest || true
 	@echo "Completed cleaning."
 
 fmt:
@@ -85,7 +88,15 @@ cover:
 
 build:
 	@echo "Building binaries..."
-	@cd $(BUILDPATH)/cmd/nihao && $(GOBUILD) -ldflags="-X 'main.Version=$(VERSION)'" -o $(BUILDPATH)/cmd/nihao/nihao
+	@rm -rf $(BUILDPATH)/builds/nihao
+	@cd $(BUILDPATH)/cmd/nihao && GOOS=linux GOARCH=amd64 $(GOBUILD) -ldflags="-X 'main.Version=$(VERSION)'" -o $(BUILDPATH)/builds/nihao
 	@echo "Completed building binaries."
+
+image: build
+	@echo "Building docker image(s)..."
+	@docker image rm m4dcoder/nihao:latest || true
+	@docker build --platform=linux/amd64 -t m4dcoder/nihao:latest $(BUILDPATH)/builds
+	@cd $(BUILDPATH)/builds && docker save m4dcoder/nihao:latest > nihao.latest.tar.gz
+	@echo "Completed building docker image(s)."
 
 all: debug clean fmt vet lint sec tests
